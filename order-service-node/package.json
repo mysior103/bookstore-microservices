@@ -1,0 +1,17 @@
+{
+  "name": "order-service",
+  "version": "1.0.0",
+  "description": "This is a order service written in Node JS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Rafal Podles",
+  "license": "ISC",
+  "dependencies": {
+    "eureka-client": "^1.1.0",
+    "eureka-js-client": "^4.5.0",
+    "express": "^4.17.1",
+    "sequelize": "^5.16.0"
+  }
+}

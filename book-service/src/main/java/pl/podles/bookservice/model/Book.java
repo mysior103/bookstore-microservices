@@ -13,4 +13,5 @@ public class Book {
     private LocalDate releaseDate;
     private Integer numberOfPages;
     private String ISBN;
+    private boolean availability;
 }
