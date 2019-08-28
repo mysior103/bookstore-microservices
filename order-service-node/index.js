@@ -30,7 +30,7 @@ const client = new Eureka({
 const http = require('http');
 
 const hostname = 'localhost';
-const port = 8082;
+const port = 8083;
 
 const server = http.createServer(function (req,res) {
     res.statusCode = 200;

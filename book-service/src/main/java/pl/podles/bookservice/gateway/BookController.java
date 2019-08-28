@@ -1,6 +1,7 @@
 package pl.podles.bookservice.gateway;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.podles.bookservice.model.Book;
 import pl.podles.bookservice.service.BookServiceImpl;
@@ -22,7 +23,6 @@ public class BookController {
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
-
     @GetMapping
     public ResponseEntity<Book> getBook(String id) {
         Optional<Book> optionalBook =  bookService.getBook(id);
