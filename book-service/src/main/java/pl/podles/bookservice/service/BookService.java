@@ -7,6 +7,12 @@ import java.util.Optional;
 
 public interface BookService {
     List<Book> getAllBooks();
+
     Optional<Book> getBook(String id);
-    void saveBook(Book book);
+
+    void saveBook(Book book) throws Exception;
+
+    List<Book> getAllByIsbn(List<String> isbns);
+
+    void editBook(String isbn, Book book) throws Exception;
 }

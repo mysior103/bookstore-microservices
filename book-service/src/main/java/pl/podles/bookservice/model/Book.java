@@ -1,17 +1,20 @@
 package pl.podles.bookservice.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Document
 @Data
 public class Book {
-    private String Id;
+    @JsonIgnore
+    @Id
+    private String _id;
     private String title;
-    private String[] authors;
-    private LocalDate releaseDate;
-    private Integer numberOfPages;
-    private String ISBN;
-    private boolean availability;
+    private List<String> authors;
+    private String isbn;
+    private Double price;
 }

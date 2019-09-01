@@ -1,7 +1,7 @@
 package pl.podles.bookservice.gateway;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.podles.bookservice.model.Book;
 import pl.podles.bookservice.service.BookServiceImpl;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequestMapping(path = "/book")
 public class BookController {
 
-    BookServiceImpl bookService;
+    private BookServiceImpl bookService;
 
     public BookController(BookServiceImpl bookService) {
         this.bookService = bookService;
@@ -23,9 +23,10 @@ public class BookController {
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
-    @GetMapping
-    public ResponseEntity<Book> getBook(String id) {
-        Optional<Book> optionalBook =  bookService.getBook(id);
+
+    @GetMapping("/{isbn}")
+    public ResponseEntity<Book> getBook(@PathVariable String isbn) {
+        Optional<Book> optionalBook = bookService.getBook(isbn);
         return optionalBook.isPresent()
                 ? ResponseEntity.ok(optionalBook.get())
                 : ResponseEntity.notFound().build();
@@ -34,6 +35,16 @@ public class BookController {
     @PostMapping
     public void saveBook(@RequestBody Book book) {
         bookService.saveBook(book);
+    }
+
+    @PutMapping("/{isbn}")
+    public ResponseEntity editBook(@PathVariable String isbn, @RequestBody Book book) {
+        try {
+            bookService.editBook(isbn, book);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
     }
 
 }
