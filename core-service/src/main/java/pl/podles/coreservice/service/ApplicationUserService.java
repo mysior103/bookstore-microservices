@@ -1,6 +1,7 @@
 package pl.podles.coreservice.service;
 
 
+import pl.podles.coreservice.exception.NoAccessException;
 import pl.podles.coreservice.model.ApplicationUser;
 import pl.podles.coreservice.model.UserRoleEnum;
 
@@ -15,7 +16,7 @@ public interface ApplicationUserService {
 
     UserRoleEnum getLoggedRole();
 
-    void checkAccess(UserRoleEnum role) throws NoAccessException;
+    void checkAccess(UserRoleEnum role) throws  NoAccessException;
 
     Optional<ApplicationUser> getUser(String username);
 }

@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import pl.podles.coreservice.exception.NoAccessException;
 import pl.podles.coreservice.model.ApplicationUser;
 import pl.podles.coreservice.model.UserRoleEnum;
 import pl.podles.coreservice.security.ApplicationUserRepository;

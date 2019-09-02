@@ -6,24 +6,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.podles.coreservice.dto.UserDTO;
 import pl.podles.coreservice.mapper.UserMapper;
+import pl.podles.coreservice.model.UserRoleEnum;
 import pl.podles.coreservice.security.ApplicationUserRepository;
 
 @RestController
-public class AdminController {
+public class UserController {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private ApplicationUserRepository applicationUserRepository;
 
-    public AdminController(BCryptPasswordEncoder bCryptPasswordEncoder, ApplicationUserRepository applicationUserRepository) {
+    public UserController(BCryptPasswordEncoder bCryptPasswordEncoder, ApplicationUserRepository applicationUserRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.applicationUserRepository = applicationUserRepository;
     }
 
 
     @PostMapping("/sign-up-admin")
-    public void signUp(@RequestBody UserDTO userDTO) {
+    public void signUpAdmin(@RequestBody UserDTO userDTO) {
         userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-        applicationUserRepository.save(UserMapper.toEntity(userDTO));
+        applicationUserRepository.save(UserMapper.toEntity(userDTO, UserRoleEnum.ADMIN));
+    }
+
+    @PostMapping("/sign-up-customer")
+    public void signUpCustomer(@RequestBody UserDTO userDTO) {
+        userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+        applicationUserRepository.save(UserMapper.toEntity(userDTO,UserRoleEnum.CUSTOMER));
     }
 
 }

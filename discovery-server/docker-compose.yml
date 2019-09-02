@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  core-service:
+    container_name: discovery-server
+    build:
+      context: . # directory in which Dockerfile is stored
+    restart: always
+    ports:
+      - 8761:8761
+
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true

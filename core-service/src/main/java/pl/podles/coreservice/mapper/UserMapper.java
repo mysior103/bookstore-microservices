@@ -5,11 +5,11 @@ import pl.podles.coreservice.model.ApplicationUser;
 import pl.podles.coreservice.model.UserRoleEnum;
 
 public class UserMapper {
-    public static ApplicationUser toEntity(UserDTO userDTO) {
+    public static ApplicationUser toEntity(UserDTO userDTO, UserRoleEnum role) {
         ApplicationUser applicationUser = new ApplicationUser();
         applicationUser.setUsername(userDTO.getUsername());
         applicationUser.setPassword(userDTO.getPassword());
-        applicationUser.setUserRole(UserRoleEnum.ADMIN);
+        applicationUser.setUserRole(role);
         return applicationUser;
     }
 }
