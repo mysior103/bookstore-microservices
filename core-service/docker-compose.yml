@@ -19,7 +19,7 @@ services:
     restart: always # always restarts the docker container
 
     ports: # maps ports in HOST:CONTAINER format
-      - 27017:27017
+      - 27081:27017
 
     volumes: # named volume HOST:CONTAINER
       - core-service:/data/db
