@@ -1,53 +1,48 @@
 package pl.podles.customerservice.service;
 
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.podles.bookstore.shared.exception.NoAccessException;
-import pl.podles.bookstore.user.*;
+import pl.podles.customerservice.CustomerFoundException;
+import pl.podles.customerservice.CustomerNotFoundException;
+import pl.podles.customerservice.model.Customer;
+import pl.podles.customerservice.repository.CustomerRepository;
+
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
-    private ApplicationUserService applicationUserService;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, ApplicationUserService applicationUserService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.applicationUserService = applicationUserService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
-    public void createCustomerAccount(CustomerWithPasswordDTO customerWithPasswordDTO) throws UserExistsException {
-        if (applicationUserService.checkIfUserExist(customerWithPasswordDTO.getUsername())) {
-            throw new UserExistsException(customerWithPasswordDTO.getUsername());
-        }
-        customerWithPasswordDTO.setPassword(bCryptPasswordEncoder.encode(customerWithPasswordDTO.getPassword()));
-        Customer customer = CustomerMapper.ToEntity(customerWithPasswordDTO);
-        applicationUserService.saveNewUser(customer.getApplicationUser());
+    public Optional<Customer> findCustomerByUsername(String username) {
+        return customerRepository.findCustomerByUsername(username);
+    }
+
+    @Override
+    public void updateCustomer(Customer customer) throws CustomerNotFoundException {
+        Customer customerFromDB = findCustomerByUsername(customer.getUsername()).orElseThrow(() -> new CustomerNotFoundException(customer.getUsername()));
+        customer.set_id(customerFromDB.get_id());
         customerRepository.save(customer);
     }
 
     @Override
-    public Customer findCustomerByUsername(String username) throws UserNotFoundException {
-        ApplicationUser user = applicationUserService.getUser(username).orElseThrow(() -> new UserNotFoundException(username));
-        return customerRepository.findByApplicationUser(user).orElseThrow(() -> new UserNotFoundException(username));
+    public void createCustomer(Customer customer) throws CustomerFoundException {
+        if (findCustomerByUsername(customer.getUsername()).isPresent()) {
+            throw new CustomerFoundException(customer.getUsername());
+        }
+        customerRepository.save(customer);
     }
 
     @Override
-    public void updateCustomer(String username, CustomerWithPasswordDTO customerWithPasswordDTO) throws UserNotFoundException, NoAccessException {
-        if (applicationUserService.getLoggedUsername().equals(username) || applicationUserService.getLoggedRole().equals(UserRoleEnum.ADMIN)) {
-            String id = findCustomerByUsername(username).get_id();
-            Customer customer = CustomerMapper.ToEntity(customerWithPasswordDTO);
-            customer.set_id(id);
-            customerRepository.save(customer);
-        } else {
-            throw new NoAccessException();
+    public Customer getCustomer(String username) throws CustomerNotFoundException {
+        Optional<Customer> customerOptional = findCustomerByUsername(username);
+        if (customerOptional.isPresent()) {
+            return customerOptional.get();
         }
-
-
+        throw new CustomerNotFoundException(username);
     }
-
-
 }

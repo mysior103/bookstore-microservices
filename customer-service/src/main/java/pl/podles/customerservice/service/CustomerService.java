@@ -1,15 +1,19 @@
 package pl.podles.customerservice.service;
 
 
-import pl.podles.bookstore.shared.exception.NoAccessException;
-import pl.podles.bookstore.user.UserExistsException;
-import pl.podles.bookstore.user.UserNotFoundException;
+import pl.podles.customerservice.CustomerFoundException;
+import pl.podles.customerservice.CustomerNotFoundException;
+import pl.podles.customerservice.model.Customer;
+
+import java.util.Optional;
 
 public interface CustomerService {
-    void createCustomerAccount(CustomerWithPasswordDTO customerWithPasswordDTO) throws UserExistsException;
 
-    Customer findCustomerByUsername(String username) throws UserNotFoundException;
+    Optional<Customer> findCustomerByUsername(String username) throws CustomerNotFoundException;
 
-    void updateCustomer(String username, CustomerWithPasswordDTO customerWithPasswordDTO) throws UserNotFoundException, NoAccessException;
+    void updateCustomer(Customer customer) throws CustomerNotFoundException;
 
+    void createCustomer(Customer customer) throws CustomerFoundException;
+
+    Customer getCustomer(String username) throws CustomerNotFoundException;
 }

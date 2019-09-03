@@ -1,5 +1,6 @@
 package pl.podles.orderservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -12,12 +13,11 @@ import java.util.List;
 @Data
 public class Order {
     @Id
+    @JsonIgnore
     String _id;
     LocalDateTime orderDate;
     LocalDateTime lastChangeDate;
-    @DBRef
-    List<Book> books;
-    @DBRef
-    Customer customer;
+    List<String> isbns;
+    String username;
     OrderStatusEnum orderStatus;
 }
