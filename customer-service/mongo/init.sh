@@ -3,7 +3,7 @@ echo 'Initializing mongodb'
 MONGO_HOST=localhost
 MONGO_PORT=27017
 
-DB_NAME=book-service-db
+DB_NAME=customer-service-db
 DB_USERNAME=rafal
 DB_PASSWORD=rafal
 

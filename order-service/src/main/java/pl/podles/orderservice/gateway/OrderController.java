@@ -9,7 +9,8 @@ import pl.podles.orderservice.model.OrderStatusEnum;
 import pl.podles.orderservice.service.OrderService;
 
 
-@RestController("/order")
+@RestController
+@RequestMapping("/order")
 public class OrderController {
 
     OrderService orderService;

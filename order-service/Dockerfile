@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk
+FROM openjdk:11-jdk-slim
 
 ARG name
 ENV name=order-service
@@ -13,4 +13,4 @@ MAINTAINER Rafal Podles
 
 ENTRYPOINT java -jar /usr/src/${name}/build/libs/${name}-0.0.1-SNAPSHOT.jar
 
-EXPOSE 8082
+EXPOSE 8084

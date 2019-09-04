@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  core-service:
+  micro-service:
     container_name: core-service
     build:
       context: . # directory in which Dockerfile is stored
@@ -9,11 +9,11 @@ services:
     ports:
       - 8081:8081 # rest
     depends_on: # runs specified service before dependent service
-      - mongodb-core-service # name of service
+      - mongodb # name of service
     networks:
       - app-network
 
-  mongodb-core-service:
+  mongodb:
     container_name: mongodb-core-service
     build: mongo # builds Dockerfile in mongo directory
     restart: always # always restarts the docker container

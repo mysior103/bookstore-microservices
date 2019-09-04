@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk
+FROM openjdk:11-jdk-slim
 
 ARG name
 ENV name=customer-service
