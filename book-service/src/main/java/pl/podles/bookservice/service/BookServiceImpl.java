@@ -2,6 +2,7 @@ package pl.podles.bookservice.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import pl.podles.bookservice.BookNotFoundException;
 import pl.podles.bookservice.model.Book;
 import pl.podles.bookservice.repository.BookRepository;
 
@@ -50,5 +51,10 @@ public class BookServiceImpl implements BookService {
         Book bookFromDB = bookRepository.findByIsbn(isbn).orElseThrow(() -> new Exception("Cannot find the book"));
         book.set_id(bookFromDB.get_id());
         bookRepository.save(book);
+    }
+
+    @Override
+    public Book getByTitle(String title) throws BookNotFoundException {
+        return bookRepository.findByTitle(title).orElseThrow(()-> new BookNotFoundException(title));
     }
 }

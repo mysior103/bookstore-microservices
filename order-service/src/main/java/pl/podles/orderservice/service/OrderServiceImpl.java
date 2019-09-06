@@ -9,8 +9,7 @@ import pl.podles.orderservice.model.*;
 import pl.podles.orderservice.repository.OrderRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,13 +18,17 @@ public class OrderServiceImpl implements OrderService {
 
     private RestTemplate restTemplate;
 
-    public OrderServiceImpl(OrderRepository orderRepository, RestTemplate restTemplate) {
+    public OrderServiceImpl(OrderRepository orderRepository, RestTemplate restTemplate, BookService bookService) {
         this.orderRepository = orderRepository;
         this.restTemplate = restTemplate;
+        this.bookService = bookService;
     }
 
-    @Value("${url.book-service}")
-    private String bookUrl;
+
+
+    private BookService bookService;
+
+
 
     @Value("${url.customer-service}")
     private String customerUrl;
@@ -47,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderWithBooksDTO> orderWithBooksDTOS = new ArrayList<>();
 
         for (Order order : allOrders) {
-            List<Book> books = order.getIsbns().stream().map(this::getBookByIsbn).collect(Collectors.toList());
+            List<Book> books = order.getIsbns().stream().map(isbn->bookService.getBookByIsbn(isbn)).collect(Collectors.toList());
             orderWithBooksDTOS.add(OrderMapper.toDtoWithBooks(order, books));
         }
         return orderWithBooksDTOS;
@@ -63,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> allOrders = orderRepository.findAll();
         List<OrderWithBooksAndCustomerDTO> orderWithBooksAndCustomerDTOS = new ArrayList<>();
         for(Order o : allOrders){
-            List<Book> books = o.getIsbns().stream().map(this::getBookByIsbn).collect(Collectors.toList());
+            List<Book> books = o.getIsbns().stream().map(isbn->bookService.getBookByIsbn(isbn)).collect(Collectors.toList());
             Customer customer = getCustomer(o.getUsername());
             orderWithBooksAndCustomerDTOS.add(OrderMapper.toDtoWithBooksAndCustomer(o,books,customer));
         }
@@ -78,12 +81,12 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
     }
 
-    private Book getBookByIsbn(String isbn) {
-        return restTemplate.getForObject(bookUrl + "/" + isbn, Book.class);
-    }
+
 
     private Customer getCustomer(String username){
         return restTemplate.getForObject(customerUrl + "/" + username, Customer.class);
     }
+
+
 
 }

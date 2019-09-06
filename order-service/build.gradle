@@ -26,6 +26,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.7.RELEASE'
+
 	compileOnly('org.projectlombok:lombok:1.18.2')
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

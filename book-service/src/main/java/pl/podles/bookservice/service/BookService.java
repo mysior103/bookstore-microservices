@@ -1,5 +1,6 @@
 package pl.podles.bookservice.service;
 
+import pl.podles.bookservice.BookNotFoundException;
 import pl.podles.bookservice.model.Book;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface BookService {
     List<Book> getAllByIsbn(List<String> isbns);
 
     void editBook(String isbn, Book book) throws Exception;
+
+    Book getByTitle(String title) throws BookNotFoundException;
 }

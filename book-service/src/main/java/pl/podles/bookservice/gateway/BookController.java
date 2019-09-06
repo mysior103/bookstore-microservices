@@ -3,6 +3,7 @@ package pl.podles.bookservice.gateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.podles.bookservice.BookNotFoundException;
 import pl.podles.bookservice.model.Book;
 import pl.podles.bookservice.service.BookServiceImpl;
 
@@ -45,6 +46,15 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{title}")
+    public ResponseEntity getByTitle(@PathVariable String title){
+        try {
+            return ResponseEntity.ok(bookService.getByTitle(title));
+        } catch (BookNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }
