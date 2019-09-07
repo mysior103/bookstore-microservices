@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void addNewOrder(OrderDTO orderDTO) {
-        var order = new Order();
+        Order order = new Order();
         order.setIsbns(orderDTO.getBooksISBN());
         order.setUsername(orderDTO.getCustomerUsername());
         order.setOrderStatus(OrderStatusEnum.NEW);
@@ -45,11 +45,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderWithBooksDTO> getAllByUsername(String username) {
-        var allOrders = orderRepository.findAllByUsername(username);
-        var orderWithBooksDTOS = new ArrayList<OrderWithBooksDTO>();
+        List<Order> allOrders = orderRepository.findAllByUsername(username);
+        ArrayList<OrderWithBooksDTO> orderWithBooksDTOS = new ArrayList<OrderWithBooksDTO>();
 
-        for (var order : allOrders) {
-            var books = order.getIsbns().stream().map(isbn -> bookService.getBookByIsbn(isbn)).collect(Collectors.toList());
+        for (Order order : allOrders) {
+            List<Book> books = order.getIsbns().stream().map(isbn -> bookService.getBookByIsbn(isbn)).collect(Collectors.toList());
             orderWithBooksDTOS.add(OrderMapper.toDtoWithBooks(order, books));
         }
         return orderWithBooksDTOS;
@@ -62,9 +62,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderWithBooksAndCustomerDTO> getAllWithDetails() {
-        var allOrders = orderRepository.findAll();
-        var orderWithBooksAndCustomerDTOS = new ArrayList<OrderWithBooksAndCustomerDTO>();
-        for (var o : allOrders) {
+        List<Order> allOrders = orderRepository.findAll();
+        ArrayList<OrderWithBooksAndCustomerDTO> orderWithBooksAndCustomerDTOS = new ArrayList<OrderWithBooksAndCustomerDTO>();
+        for (Order o : allOrders) {
             orderWithBooksAndCustomerDTOS
                     .add(OrderMapper.toDtoWithBooksAndCustomer(o,
                             o.getIsbns().stream().map(isbn -> bookService.getBookByIsbn(isbn)).collect(Collectors.toList()),
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateStatus(String id, OrderStatusEnum status) throws OrderNotFoundException {
-        var order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
         order.setOrderStatus(status);
         order.setLastChangeDate(LocalDateTime.now());
         orderRepository.save(order);

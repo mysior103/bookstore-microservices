@@ -31,7 +31,7 @@ public class BookService {
             })
 
     public Book getBookByIsbn(String isbn) {
-        var bookResponse = restTemplate.getForObject(bookUrl + "/" + isbn, Book.class);
+        Book bookResponse = restTemplate.getForObject(bookUrl + "/" + isbn, Book.class);
         bookCache.put(isbn,bookResponse);
         return bookResponse;
     }
